@@ -1,0 +1,13 @@
+application_mode:
+  default: "approve_first"
+
+notifications:
+  telegram:
+    enabled: true
+  email:
+    enabled: false
+
+scraping:
+  scan_schedule:
+    times: ["08:00", "18:00"]
+    timezone: "Asia/Kolkata"

@@ -1,0 +1,403 @@
+personal:
+  full_name: "Kartik Garg"
+  email: "gargkartik74@gmail.com"
+  phone: "+91-90348-45195"
+  location:
+    city: "Delhi"
+    state: "Delhi"
+    country: "India"
+    willing_to_relocate: true
+    preferred_locations: ["Bangalore", "Delhi NCR", "Mumbai", "Remote", "Hyderabad"]
+  linkedin_url: "https://www.linkedin.com/in/kartik-garg-99a754252/"
+  github_url: "https://github.com/Kartikgarg74"
+  portfolio_url: ""
+  google_scholar_url: "https://scholar.google.com/citations?user=MhW4sd8AAAAJ&hl=en"
+  orcid: "0009-0007-8413-6800"
+  medium_url: "https://medium.com/@gargkartik74"
+  date_of_birth: "2004-08-13"
+  nationality: "Indian"
+  work_authorization:
+    india: "Citizen"
+    us: "Requires Sponsorship"
+    other: "Requires Visa"
+
+professional_summary: |
+  Final-year B.Tech student in Electronics & Communication Engineering at USICT, GGSIPU
+  with dual minors in Data Analytics & Machine Learning and Computer Engineering. Hands-on
+  experience in AI/ML across research (NIT Warangal, DRDO) and industry (NHAI, PyVision Analytics).
+
+  Published researcher with papers at SPIN 2025 and Springer, and 10 research articles total.
+  Built production AI systems including RECHK (AI-powered academic publishing platform, CEO,
+  submitted to Y Combinator) and multiple deployed applications. AWS Certified AI Practitioner,
+  AWS Community Builder, Microsoft Learn Student Ambassador, and Intel Student Ambassador.
+
+  Seeking AI Engineer / Data Scientist / Gen AI Engineer roles where I can apply deep learning,
+  NLP, and data analytics expertise to build impactful products.
+
+education:
+  - degree: "B.Tech in Electronics & Communication Engineering"
+    institution: "University School of Information Communication and Technology (USICT), GGSIPU"
+    location: "Delhi, India"
+    graduation_date: "2026-07"
+    gpa: "7.67/10"
+    minors:
+      - "Data Analytics & Machine Learning"
+      - "Computer Engineering"
+    relevant_coursework:
+      - "Machine Learning"
+      - "Deep Learning"
+      - "Natural Language Processing"
+      - "Database Management"
+      - "Data Structures"
+      - "Operating Systems"
+      - "Object Oriented Programming"
+    achievements: []
+  - degree: "Higher Secondary Education (12th)"
+    institution: "D.A.V.M. Public School"
+    location: "India"
+    graduation_date: "2022-04"
+    gpa: "88.8%"
+    relevant_coursework: []
+    achievements: []
+
+work_experience:
+  - title: "Associate AI Engineer Intern"
+    company: "National Highway Authority of India (NHAI)"
+    location: "India"
+    start_date: "2026-02"
+    end_date: "2026-06"
+    description: |
+      Contributing to the integration of Generative AI into the NHAI project lifecycle,
+      working on initiatives aimed at reducing manual workflows by 70% across the institution.
+      Applied dimensionality reduction and statistical techniques to support analytical findings
+      and business decision support. Contributed to model evaluation and refinement based on
+      data-driven observations and defined rubrics.
+    technologies: ["Python", "Generative AI", "Statistical Analysis", "Dimensionality Reduction"]
+    achievements:
+      - "Contributing to GenAI integration aimed at reducing manual workflows by 70%"
+      - "Translated analytical outputs into clear insights for internal stakeholders"
+
+  - title: "AI Analyst Intern"
+    company: "PyVision Analytics"
+    location: "Delhi, India"
+    start_date: "2025-10"
+    end_date: "2025-11"
+    description: |
+      Evaluated and benchmarked LLM analytical reasoning by designing prompts for complex,
+      multi-file datasets and validating outputs using code-based ground-truth analysis.
+      Performed advanced data analysis and visualization (PCA, t-SNE, change-point detection).
+      Identified model failure cases and authored detailed evaluation rubrics to support
+      LLM fine-tuning workflows (RLHF/RLAIF-style feedback).
+    technologies: ["Python", "PCA", "t-SNE", "LLM Evaluation", "RLHF", "Data Analytics"]
+    achievements:
+      - "Designed atomic evaluation rubrics for LLM benchmarking"
+      - "Applied advanced analytics (Z-tests, p-tests, alert scoring, PCA, t-SNE) across real-world datasets"
+
+  - title: "Research Intern"
+    company: "National Institute of Technology (NIT) Warangal"
+    location: "Remote"
+    start_date: "2025-08"
+    end_date: "2025-11"
+    description: |
+      Implemented and evaluated attention-enhanced CNN architectures (SENet + ECA, Triplet
+      Attention, CBAM, Coordinate Attention, Pyramid Squeeze Attention) for plant disease
+      classification on complex image datasets. Designed and optimised RTR Lite MobileNet
+      variants with attention mechanisms for real-time image classification.
+    technologies: ["Python", "PyTorch", "CNN", "Attention Mechanisms", "MobileNet", "Computer Vision"]
+    achievements:
+      - "Implemented advanced CNN architectures improving model accuracy and robustness"
+      - "Designed lightweight MobileNet variants with attention mechanisms for real-time classification"
+
+  - title: "CEO & AI/ML Lead"
+    company: "RECHK"
+    location: "Delhi, India"
+    start_date: "2025-02"
+    end_date: "2025-06"
+    description: |
+      Co-founded and led development of RECHK, an AI-powered academic publishing platform.
+      Developed journal classification model with 86% accuracy on 1,000+ PDFs across 5 categories.
+      Implemented AI content detection using GPT-2 Mini, integrated with plagiarism detection
+      and document image quality (DPI) validation. Submitted to Y Combinator for funding.
+    technologies: ["Python", "PyTorch", "RoBERTa", "Sentence-BERT", "GPT-2", "HuggingFace", "NLP"]
+    achievements:
+      - "Built journal classification model with 86% accuracy across 5 categories (Q1-Q4, Non-publishable)"
+      - "Improved research paper review efficiency by 70%"
+      - "Deployed via HuggingFace Inference Endpoints, processing 250 PDFs/day"
+
+  - title: "ML Intern"
+    company: "Defence Research and Development Organisation (DRDO)"
+    location: "Delhi, India"
+    start_date: "2024-06"
+    end_date: "2024-08"
+    description: |
+      Built encrypted traffic classification system on 10,000+ samples using deep learning.
+      Transformed dataset of 10,845 entries with 29 features into 201 packet block images
+      to analyze traffic patterns. Achieved 73% accuracy using enhanced CNN architecture.
+      Reduced manual analysis time by 40% through architecture refinements.
+    technologies: ["Python", "CNN", "Deep Learning", "Network Security", "Image Processing"]
+    achievements:
+      - "Built encrypted traffic classification system achieving 73% detection accuracy on 10K+ samples"
+      - "Reduced manual analysis time by 40% through architecture refinements"
+
+skills:
+  programming_languages:
+    expert: ["Python"]
+    proficient: ["SQL", "TypeScript", "JavaScript"]
+    familiar: ["Go"]
+  frameworks:
+    - "TensorFlow"
+    - "PyTorch"
+    - "Scikit-learn"
+    - "LangChain"
+    - "HuggingFace Transformers"
+    - "React"
+    - "Next.js"
+    - "Node.js"
+  tools:
+    - "Docker"
+    - "Git"
+    - "AWS (Bedrock, Certified AI Practitioner)"
+    - "Google Cloud Platform (GCP)"
+    - "Google Vertex AI"
+    - "Vercel"
+    - "MySQL"
+    - "MongoDB"
+    - "PowerBI"
+    - "MS Excel"
+    - "Jupyter"
+  ai_ml:
+    - "Deep Learning (CNN, Transfer Learning)"
+    - "NLP (BERT, RoBERTa, Sentence-BERT, GPT-2)"
+    - "Large Language Models (LLMs)"
+    - "Computer Vision"
+    - "Attention Mechanisms (SE, ECA, CBAM, Triplet, Coordinate, Pyramid Squeeze)"
+    - "Model Evaluation & Benchmarking"
+    - "RLHF / RLAIF"
+    - "Generative AI"
+  data:
+    - "Exploratory Data Analysis (EDA)"
+    - "Statistical Analysis (PCA, t-SNE, Z-tests, p-tests)"
+    - "Data Preprocessing & Feature Engineering"
+    - "Data Visualization (Matplotlib, Seaborn, Plotly)"
+    - "Regression, Classification, Clustering (K-Means)"
+    - "ETL Pipelines"
+    - "A/B Testing"
+  soft_skills:
+    - "Leadership & Team Management"
+    - "Cross-functional Collaboration"
+    - "Stakeholder Communication"
+    - "Product Roadmapping"
+    - "Agile/Scrum"
+    - "Technical Writing"
+    - "Strategic Thinking"
+    - "Analytical Thinking"
+
+projects:
+  - name: "RECHK"
+    description: |
+      AI-powered academic publishing platform with journal classification (86% accuracy),
+      AI-content detection, plagiarism checks, and image DPI validation. Fine-tuned RoBERTa
+      and Sentence-BERT models. Deployed via HuggingFace Inference Endpoints.
+    technologies: ["Python", "PyTorch", "RoBERTa", "Sentence-BERT", "HuggingFace"]
+    url: "https://rechk.in"
+    impact: "Processing 1,100+ papers, 86% accuracy, submitted to YC for funding"
+
+  - name: "AI Operating System"
+    description: |
+      AI-powered Operating System using MCP server orchestration with GPT-oss model.
+      Docker-hosted orchestral backend with Tauri 2.0 frontend. Automated workflow
+      management reducing manual operations by 80%.
+    technologies: ["Tauri 2.0", "Docker", "MCP", "TypeScript"]
+    url: "https://github.com/Kartikgarg74/aios"
+    impact: "Cross-platform desktop application with real-time monitoring"
+
+  - name: "GrahPrakash"
+    description: |
+      Multilingual Vedic astrology chatbot using Gemini 2.5 Flash API with 1M-token
+      context processing. Serverless architecture on Vercel with <1.5s latency.
+    technologies: ["TypeScript", "Gemini API", "Google MediaPipe", "Vercel"]
+    url: "https://grah-prakash.vercel.app/"
+    impact: "4.9 star rating in 48h beta, 250+ daily users, 99.9% uptime"
+
+  - name: "Synapse"
+    description: |
+      AI-powered cancer detection platform achieving 92% diagnostic accuracy for oral,
+      cervical, lung, and skin cancers. GDPR & HIPAA compliant.
+    technologies: ["Python", "Deep Learning", "Healthcare AI"]
+    url: "https://synapse-gules.vercel.app/"
+    impact: "92% accuracy, Top-60 semi-finalist in FHIR Hackathon, reduced diagnostic errors by 30%"
+
+  - name: "DataForge"
+    description: |
+      Generative SQL visualization platform enabling natural language querying and
+      data visualization.
+    technologies: ["Next.js", "TypeScript", "SQLite", "AI"]
+    url: "https://github.com/Kartikgarg74/dataforge"
+    impact: "Full-stack AI-powered data tool, potential funding candidate"
+
+  - name: "Multi-Model Price Prediction"
+    description: |
+      Multimodal ML solution for Amazon ML Challenge 2025 using product text and images
+      for price prediction with optimised ensemble regression.
+    technologies: ["Python", "Scikit-learn", "Computer Vision", "NLP"]
+    url: "https://github.com/Kartikgarg74/AML2025"
+    impact: "Achieved SMAPE 50.49, ~1200 rank nationally"
+
+publications:
+  - title: "Advancing Transfer Learning with GAP, Depth Constraints and Average Depth Constraints for Diverse Datasets"
+    venue: "12th International Conference on SPIN 2025"
+    role: "Lead Author"
+  - title: "Municipal Solid Waste Management Prediction Through Machine Learning Models: An Ensemble Tree Regressor Analysis"
+    venue: "Springer"
+    url: "https://link.springer.com/chapter/10.1007/978-981-96-9971-1_3"
+  - title: "8 additional research articles on preprint servers"
+    venue: "Various preprint servers"
+
+certifications:
+  - name: "AWS Certified AI Practitioner"
+    issuer: "Amazon Web Services"
+    date: "2025"
+    credential_id: ""
+  - name: "C Programming Proficiency"
+    issuer: ""
+    date: ""
+  - name: "Intel Student Ambassador Level 1"
+    issuer: "Intel"
+    date: ""
+  - name: "Introduction to Model Context Protocol"
+    issuer: ""
+    date: ""
+  - name: "Gen AI Academy Completion Certificate"
+    issuer: ""
+    date: ""
+  - name: "Business Analysis & Process Management"
+    issuer: ""
+    date: ""
+
+languages:
+  - language: "English"
+    proficiency: "Professional"
+  - language: "Hindi"
+    proficiency: "Native"
+
+leadership:
+  - role: "Startup Head"
+    organization: "Institution's Innovation Council (USICT)"
+    period: "Jan 2025 - present"
+    highlights:
+      - "Directed Rs. 5 Crore startup funding initiative"
+      - "Coordinated national 36-hour hackathon with 200+ participants"
+      - "Evaluated 50+ startup ideas"
+  - role: "CEO"
+    organization: "USICT Alumni Committee"
+    period: "Apr 2024 - present"
+    highlights:
+      - "Led alumni engagement for 1,000+ members"
+      - "Hosted 10+ sessions with 50+ industry professionals"
+      - "Modernized alumni database for 25th anniversary Grand Alumni Meet"
+  - role: "Lead Organizer"
+    organization: "VIGYAAN Science Festival"
+    period: "Jan 2024 - Apr 2024"
+    highlights:
+      - "Coordinated 1,000+ participants across 6 competitions and 24-hour hackathon"
+
+achievements:
+  - "AWS Community Builders (selected among top 600 technology professionals globally)"
+  - "Microsoft Learn Student Ambassador"
+  - "Intel Student Ambassador"
+  - "Top-60 Semi-Finalist - Predictive AI in Healthcare with FHIR International Hackathon (2025)"
+  - "Top-47 Startup Selection - GI2S Startup Funding Initiative"
+  - "Co-Founder of Founder's Hunt - progressed through 3 rounds of Y Combinator selection"
+
+job_preferences:
+  target_roles:
+    - "AI Engineer"
+    - "Data Scientist"
+    - "Gen AI Engineer"
+    - "Machine Learning Engineer"
+    - "Data Analyst"
+    - "AI/ML Researcher"
+    - "Applied Scientist"
+  target_industries:
+    - "Technology"
+    - "AI/ML"
+    - "Fintech"
+    - "Healthcare AI"
+    - "SaaS"
+    - "Startups"
+    - "Research"
+  experience_level: "Entry Level / Fresher (0-2 years)"
+  job_type:
+    - "Full-time"
+    - "Internship"
+  work_mode:
+    - "Remote"
+    - "Hybrid"
+    - "On-site (preferred locations only)"
+  salary_expectations:
+    minimum_inr: 1500000
+    preferred_inr: 2200000
+    open_to_negotiation: true
+  notice_period: "Immediate (graduating July 2026)"
+  available_from: "Immediate"
+  must_have_keywords:
+    - "AI"
+    - "machine learning"
+    - "data scientist"
+    - "deep learning"
+    - "NLP"
+    - "generative AI"
+    - "data analytics"
+  nice_to_have_keywords:
+    - "computer vision"
+    - "LLM"
+    - "startup"
+    - "research"
+    - "Python"
+    - "cloud"
+    - "AWS"
+    - "GenAI"
+  exclude_keywords:
+    - "senior"
+    - "staff"
+    - "principal"
+    - "director"
+    - "VP"
+    - "10+ years required"
+    - "PhD required"
+    - "8+ years"
+
+faq:
+  - question: "Why are you interested in this role?"
+    answer_template: |
+      I'm passionate about applying AI and data science to solve real-world problems.
+      With hands-on experience in deep learning, NLP, and data analytics across research
+      institutions (NIT Warangal, DRDO) and industry (NHAI, PyVision), I'm looking to
+      contribute to impactful AI products while growing as an engineer.
+  - question: "What is your greatest strength?"
+    answer_template: |
+      My ability to go from research to production — I've published peer-reviewed papers
+      and simultaneously built deployed AI systems like RECHK (86% accuracy journal
+      classifier serving researchers) and Synapse (92% accuracy healthcare AI platform).
+  - question: "Tell me about a challenging project."
+    answer_template: |
+      At RECHK, I built an end-to-end AI research paper classification system from scratch.
+      The challenge was achieving reliable accuracy across 5 journal tiers with limited labeled
+      data. I fine-tuned RoBERTa and Sentence-BERT models, orchestrated multi-modal PyTorch
+      pipelines, and deployed via HuggingFace, achieving 86% accuracy on 1,100+ papers and
+      reducing manual review costs by 85%.
+  - question: "What are your salary expectations?"
+    answer_template: "I'm flexible and open to discussion based on the total compensation package and growth opportunities."
+  - question: "Are you authorized to work in [country]?"
+    answers:
+      india: "Yes, I am an Indian citizen."
+      us: "I would require visa sponsorship."
+      default: "I would require work authorization/visa sponsorship."
+  - question: "Gender"
+    answer: "Male"
+  - question: "Race/Ethnicity"
+    answer: "Asian"
+  - question: "Veteran status"
+    answer: "No"
+  - question: "Disability status"
+    answer: "No"

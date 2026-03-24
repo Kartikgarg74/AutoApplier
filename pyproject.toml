@@ -1,0 +1,9 @@
+[project]
+name = "autoapplier"
+version = "1.0.0"
+description = "AI-Powered Job Application Bot — Scrape, Score, Apply Automatically"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

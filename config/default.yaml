@@ -1,0 +1,196 @@
+ai:
+  primary_provider: "anthropic"
+  fallback_provider: "groq"
+
+  anthropic:
+    api_key: "${ANTHROPIC_API_KEY}"
+    models:
+      cheap: "claude-haiku-4-5-20251001"
+      quality: "claude-sonnet-4-6"
+
+  groq:
+    api_key: "${GROQ_API_KEY}"
+    model: "llama-3.3-70b-versatile"
+    rate_limit: 14400
+
+  routing:
+    job_scoring: "cheap"
+    resume_generation: "quality"
+    cover_letter: "quality"
+    form_field_answer: "cheap"
+
+  cost_optimization:
+    use_prompt_caching: true
+    truncate_job_descriptions: 2000
+    cache_similar_responses: true
+
+scraping:
+  jobspy:
+    platforms: ["linkedin", "indeed", "glassdoor", "google", "zip_recruiter"]
+    results_per_platform: 50
+    hours_old: 24
+    country: "India"
+
+  custom_scrapers:
+    greenhouse:
+      enabled: true
+      company_pages: []
+    workday:
+      enabled: true
+      company_pages: []
+      max_results_per_company: 50
+    wellfound:
+      enabled: true
+      max_pages: 3
+    naukri:
+      enabled: true
+      max_pages: 3
+    lever:
+      enabled: true
+      company_pages: []
+
+  scan_schedule:
+    frequency: "twice_daily"
+    times: ["08:00", "18:00"]
+    timezone: "Asia/Kolkata"
+
+  dedup:
+    check_existing_applications: true
+    similarity_threshold: 0.85
+
+scoring:
+  ai_model: "claude-haiku-4-5-20251001"
+  keyword_prefilter_threshold: 30
+  apply_threshold: 60
+  auto_apply_threshold: 80
+  review_range: [60, 80]
+  max_jobs_per_batch: 50
+
+resume:
+  ai_model: "claude-sonnet-4-6"
+  output_format: "pdf"
+  template: "ats_single_column"
+  max_pages: 1
+  include_photo: false
+  font: "Helvetica"
+  font_size: 11
+
+cover_letter:
+  ai_model: "claude-sonnet-4-6"
+  max_words: 300
+  generate_for_all: true
+  tone: "professional_genuine"
+  cache_enabled: true
+  cache_similarity_threshold: 0.9
+
+form_filling:
+  browser:
+    engine: "playwright"
+    browser: "chromium"
+    headless: false
+    user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0) AppleWebKit/537.36"
+    viewport:
+      width: 1440
+      height: 900
+
+  timing:
+    page_load_timeout_ms: 30000
+    min_delay_between_fields_ms: 500
+    max_delay_between_fields_ms: 3000
+    typing_speed_min_ms: 50
+    typing_speed_max_ms: 150
+    between_applications_min_sec: 120
+    between_applications_max_sec: 600
+
+  uploads:
+    resume_format: "pdf"
+    include_cover_letter: true
+
+  captcha:
+    strategy: "pause_and_notify"
+    timeout_minutes: 30
+
+  screenshots:
+    take_before_submit: true
+    take_after_submit: true
+    save_path: "data/screenshots/"
+
+application_mode:
+  default: "approve_first"
+  hybrid:
+    auto_threshold: 80
+    review_threshold: 60
+    skip_threshold: 60
+  max_applications_per_day: 30
+  max_applications_per_week: 100
+  max_applications_per_platform:
+    linkedin: 25
+    indeed: 50
+    greenhouse: 30
+    workday: 20
+    wellfound: 15
+
+anti_detection:
+  browser:
+    rotate_user_agent: false
+    disable_webdriver_flag: true
+    use_real_browser_profile: true
+    load_extensions: false
+  behavior:
+    random_scroll_before_action: true
+    random_mouse_movement: true
+    human_like_typing: true
+    vary_session_duration: true
+    take_breaks: true
+  rate_limits:
+    linkedin:
+      max_per_hour: 5
+      max_per_day: 25
+      max_per_week: 100
+      cooldown_after_error_minutes: 60
+    indeed:
+      max_per_hour: 10
+      max_per_day: 50
+    greenhouse:
+      max_per_hour: 8
+      max_per_day: 30
+    wellfound:
+      max_per_hour: 6
+      max_per_day: 15
+    naukri:
+      max_per_hour: 8
+      max_per_day: 30
+    workday:
+      max_per_hour: 5
+      max_per_day: 20
+    lever:
+      max_per_hour: 8
+      max_per_day: 30
+  sessions:
+    max_session_duration_minutes: 45
+    break_between_sessions_minutes: 15
+    proxy: null
+  on_captcha: "pause_and_notify"
+  on_ban_warning: "immediate_stop"
+  on_rate_limit: "exponential_backoff"
+
+tracking:
+  local_db: "data/kartikai.db"
+  google_sheets:
+    enabled: false
+    spreadsheet_id: "${GOOGLE_SHEET_ID}"
+    service_account_key: "config/google_sa.json"
+    sync_interval_minutes: 60
+    sheet_name: "Applications"
+
+notifications:
+  telegram:
+    bot_token: "${TELEGRAM_BOT_TOKEN}"
+    chat_id: "${TELEGRAM_CHAT_ID}"
+    enabled: true
+  email:
+    smtp_server: "smtp.gmail.com"
+    smtp_port: 587
+    sender_email: "${EMAIL_ADDRESS}"
+    sender_password: "${EMAIL_APP_PASSWORD}"
+    enabled: false

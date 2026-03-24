@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  autoapplier:
+    build: .
+    container_name: autoapplier
+    env_file: .env
+    volumes:
+      - ./data:/app/data
+      - ./config:/app/config
+    restart: unless-stopped
+    command: ["python", "main.py", "--mode", "approve_first"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys; sys.exit(0)"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
