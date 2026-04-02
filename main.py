@@ -80,8 +80,16 @@ async def run_applier(args, config, ai_router, telegram_bot):
         )
 
     if args.scan_once:
-        stats = await orchestrator.run_pipeline()
-        logger.info("Single run complete: %s", stats)
+        try:
+            stats = await orchestrator.run_pipeline()
+            logger.info("Single run complete: %s", stats)
+        except Exception as e:
+            logger.error("Single run failed: %s", e)
+            if telegram_bot:
+                await telegram_bot.send_message(
+                    f"Pipeline FAILED (single run)\nError: {str(e)[:200]}"
+                )
+            raise
         return
 
     scheduler = JobScheduler()

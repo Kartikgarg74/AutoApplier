@@ -10,6 +10,7 @@ from src.ai.router import AIRouter
 from src.ai.prompts.job_scoring import JOB_SCORING_SYSTEM_PROMPT, build_scoring_prompt
 from src.applier.profile.loader import UserProfile
 from src.database.models import get_session, Job
+from src.utils.security import sanitize_error
 
 logger = logging.getLogger(__name__)
 
@@ -73,8 +74,8 @@ class AIScorer:
             return scoring
 
         except Exception as e:
-            logger.error("AI scoring failed for %s at %s: %s", job["title"], job["company"], e)
-            return ScoringResult(relevance_score=0, recommendation="Skip", reasoning=f"Scoring error: {e}")
+            logger.error("AI scoring failed for %s at %s: %s", job["title"], job["company"], sanitize_error(e))
+            return ScoringResult(relevance_score=0, recommendation="Skip", reasoning=f"Scoring error: {sanitize_error(e)}")
 
     async def score_batch(self, jobs: list[dict], profile: UserProfile,
                           max_batch: int = 50) -> list[tuple[dict, ScoringResult]]:

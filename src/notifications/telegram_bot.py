@@ -2,6 +2,8 @@
 
 import asyncio
 import logging
+from collections import defaultdict
+from datetime import datetime, timedelta
 from pathlib import Path
 
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
@@ -30,6 +32,24 @@ class TelegramBot:
         # Callbacks for approve/reject (set by the orchestrator)
         self._approval_callbacks: dict[str, asyncio.Event] = {}
         self._approval_decisions: dict[str, str] = {}
+
+        # Rate limiting: command -> list of timestamps
+        self._command_timestamps: dict[str, list[datetime]] = defaultdict(list)
+        self._rate_limit_max = 5  # max commands per window
+        self._rate_limit_window = timedelta(minutes=1)
+
+    def _check_rate_limit(self, command: str) -> bool:
+        """Check if a command is within rate limits. Returns True if allowed."""
+        now = datetime.now()
+        # Prune old timestamps
+        self._command_timestamps[command] = [
+            ts for ts in self._command_timestamps[command]
+            if now - ts < self._rate_limit_window
+        ]
+        if len(self._command_timestamps[command]) >= self._rate_limit_max:
+            return False
+        self._command_timestamps[command].append(now)
+        return True
 
     def _is_authorized(self, update: Update) -> bool:
         """Check if the message is from an authorized chat."""
@@ -92,6 +112,9 @@ class TelegramBot:
     async def _cmd_status(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         if not self._is_authorized(update):
             return
+        if not self._check_rate_limit("status"):
+            await update.message.reply_text("Rate limited. Try again in a minute.")
+            return
         status = "PAUSED" if self._pipeline_paused else "RUNNING"
         pending = len(self._approval_callbacks)
         await update.message.reply_text(
@@ -119,15 +142,24 @@ class TelegramBot:
     async def _cmd_analytics_stub(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         if not self._is_authorized(update):
             return
+        if not self._check_rate_limit("analytics"):
+            await update.message.reply_text("Rate limited. Try again in a minute.")
+            return
         await update.message.reply_text("Analytics will be available after Phase 6 implementation.")
 
     async def _cmd_scrape_stub(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         if not self._is_authorized(update):
             return
+        if not self._check_rate_limit("scrape"):
+            await update.message.reply_text("Rate limited. Try again in a minute.")
+            return
         await update.message.reply_text("Scraping will be available after Phase 2 implementation.")
 
     async def _cmd_cost_stub(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         if not self._is_authorized(update):
+            return
+        if not self._check_rate_limit("cost"):
+            await update.message.reply_text("Rate limited. Try again in a minute.")
             return
         await update.message.reply_text("Cost tracking will be available after AI layer is active.")
 

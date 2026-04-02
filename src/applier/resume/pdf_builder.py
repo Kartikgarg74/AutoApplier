@@ -15,15 +15,48 @@ from src.utils.security import sanitize_for_filename, secure_directory, secure_f
 logger = logging.getLogger(__name__)
 
 
-def _safe_para(text: str) -> str:
+def _safe_para(text) -> str:
     """Escape text for safe use in ReportLab Paragraph (which uses XML subset)."""
     if not text:
         return ""
+    # Handle non-string types (dicts, lists) that LLMs sometimes return
+    if isinstance(text, dict):
+        text = ", ".join(str(v) for v in text.values() if v)
+    elif isinstance(text, list):
+        text = ", ".join(str(item) for item in text)
+    else:
+        text = str(text)
     # Escape XML entities but preserve our <b> tags
     text = xml_escape(text)
     # Re-allow <b> and </b> tags
     text = text.replace("&lt;b&gt;", "<b>").replace("&lt;/b&gt;", "</b>")
     return text
+
+
+def _ensure_str_list(value) -> list[str]:
+    """Ensure a value is a list of strings (handles LLM returning dicts/nested structures)."""
+    if not value:
+        return []
+    if isinstance(value, str):
+        return [value]
+    if isinstance(value, dict):
+        # LLM returned {"expert": [...], "proficient": [...]} instead of flat list
+        result = []
+        for v in value.values():
+            if isinstance(v, list):
+                result.extend(str(item) for item in v)
+            elif v:
+                result.append(str(v))
+        return result
+    if isinstance(value, list):
+        result = []
+        for item in value:
+            if isinstance(item, dict):
+                result.extend(str(v) for v in item.values() if v)
+            else:
+                result.append(str(item))
+        return result
+    return [str(value)]
 
 
 class PDFBuilder:
@@ -84,13 +117,14 @@ class PDFBuilder:
             story.append(Paragraph("EXPERIENCE", styles["SectionHeader"]))
             story.append(Spacer(1, 4))
             for exp in experience:
-                title_line = f"<b>{exp.get('title', '')}</b> | {exp.get('company', '')}"
-                story.append(Paragraph(title_line, styles["Body"]))
-                meta = f"{exp.get('location', '')} | {exp.get('dates', '')}"
-                story.append(Paragraph(meta, styles["Meta"]))
-                for bullet in exp.get("bullets", []):
-                    story.append(Paragraph(f"- {bullet}", styles["Bullet"]))
-                story.append(Spacer(1, 6))
+                if isinstance(exp, dict):
+                    title_line = f"<b>{exp.get('title', '')}</b> | {exp.get('company', '')}"
+                    story.append(Paragraph(title_line, styles["Body"]))
+                    meta = f"{exp.get('location', '')} | {exp.get('dates', '')}"
+                    story.append(Paragraph(meta, styles["Meta"]))
+                    for bullet in _ensure_str_list(exp.get("bullets", [])):
+                        story.append(Paragraph(f"- {bullet}", styles["Bullet"]))
+                    story.append(Spacer(1, 6))
 
         # Education
         education = resume_data.get("education", [])
@@ -113,19 +147,22 @@ class PDFBuilder:
         if skills:
             story.append(Paragraph("SKILLS", styles["SectionHeader"]))
             story.append(Spacer(1, 4))
-            if skills.get("technical"):
+            technical = _ensure_str_list(skills.get("technical"))
+            if technical:
                 story.append(Paragraph(
-                    f"<b>Technical:</b> {', '.join(skills['technical'])}",
+                    f"<b>Technical:</b> {', '.join(technical)}",
                     styles["Body"],
                 ))
-            if skills.get("tools"):
+            tools = _ensure_str_list(skills.get("tools"))
+            if tools:
                 story.append(Paragraph(
-                    f"<b>Tools:</b> {', '.join(skills['tools'])}",
+                    f"<b>Tools:</b> {', '.join(tools)}",
                     styles["Body"],
                 ))
-            if skills.get("soft"):
+            soft = _ensure_str_list(skills.get("soft"))
+            if soft:
                 story.append(Paragraph(
-                    f"<b>Soft Skills:</b> {', '.join(skills['soft'])}",
+                    f"<b>Soft Skills:</b> {', '.join(soft)}",
                     styles["Body"],
                 ))
             story.append(Spacer(1, 6))
@@ -136,15 +173,19 @@ class PDFBuilder:
             story.append(Paragraph("PROJECTS", styles["SectionHeader"]))
             story.append(Spacer(1, 4))
             for proj in projects:
-                story.append(Paragraph(
-                    f"<b>{proj.get('name', '')}</b> | {proj.get('technologies', '')}",
-                    styles["Body"],
-                ))
-                story.append(Paragraph(proj.get("description", ""), styles["Bullet"]))
-                story.append(Spacer(1, 4))
+                if isinstance(proj, dict):
+                    tech = proj.get('technologies', '')
+                    if isinstance(tech, list):
+                        tech = ', '.join(str(t) for t in tech)
+                    story.append(Paragraph(
+                        f"<b>{proj.get('name', '')}</b> | {tech}",
+                        styles["Body"],
+                    ))
+                    story.append(Paragraph(str(proj.get("description", "")), styles["Bullet"]))
+                    story.append(Spacer(1, 4))
 
         # Certifications
-        certs = resume_data.get("certifications", [])
+        certs = _ensure_str_list(resume_data.get("certifications", []))
         if certs:
             story.append(Paragraph("CERTIFICATIONS", styles["SectionHeader"]))
             story.append(Spacer(1, 4))

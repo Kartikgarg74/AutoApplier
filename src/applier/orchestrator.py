@@ -63,6 +63,10 @@ class ApplicationOrchestrator:
         except Exception as e:
             logger.error("Scraping failed: %s", sanitize_error(e))
             stats["errors"] += 1
+            if self.telegram_bot:
+                await self.telegram_bot.send_message(
+                    f"Scraping FAILED\nError: {sanitize_error(e)}"
+                )
             return stats
 
         if not new_jobs:
@@ -84,6 +88,10 @@ class ApplicationOrchestrator:
         except Exception as e:
             logger.error("Scoring failed: %s", sanitize_error(e))
             stats["errors"] += 1
+            if self.telegram_bot:
+                await self.telegram_bot.send_message(
+                    f"Scoring FAILED\nError: {sanitize_error(e)}"
+                )
             return stats
 
         # 3. Process qualified jobs

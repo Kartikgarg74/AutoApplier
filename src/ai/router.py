@@ -50,6 +50,20 @@ class AIRouter:
                 daily_limit=groq_config.get("rate_limit", 14400),
             )
 
+        # Validate at least one provider is configured
+        if not self.claude and not self.groq:
+            raise RuntimeError(
+                "No AI providers configured. "
+                "Set ANTHROPIC_API_KEY or GROQ_API_KEY in your .env file."
+            )
+
+        configured = []
+        if self.claude:
+            configured.append("Anthropic (Claude)")
+        if self.groq:
+            configured.append("Groq")
+        logger.info("AI providers configured: %s", ", ".join(configured))
+
         self.models = anthropic_config.get("models", {
             "cheap": "claude-haiku-4-5-20251001",
             "quality": "claude-sonnet-4-6",
