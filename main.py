@@ -25,8 +25,10 @@ def parse_args():
     parser.add_argument("--mode", default=None,
                         choices=["approve_first", "auto", "hybrid"],
                         help="Application mode override")
-    parser.add_argument("--dry-run", action="store_true",
-                        help="Dry run mode — scrape and score but don't submit")
+    parser.add_argument("--dry-run", action="store_true", default=True,
+                        help="Dry run mode — scrape, score and draft but never click Submit (default: ON)")
+    parser.add_argument("--auto-submit", action="store_true", default=False,
+                        help="DANGEROUS: allow the bot to actually click Submit. Requires explicit opt-in.")
     parser.add_argument("--log-level", default="INFO",
                         choices=["DEBUG", "INFO", "WARNING", "ERROR"],
                         help="Log level (default: INFO)")
@@ -59,16 +61,23 @@ async def run_applier(args, config, ai_router, telegram_bot):
     if applier_mode:
         config.setdefault("application_mode", {})["default"] = applier_mode
 
+    # Human-in-the-loop safety: dry_run is ON by default. Auto-submit requires
+    # explicit --auto-submit and overrides dry_run. Ported from career-ops'
+    # "NEVER submit without user review" rule.
+    effective_dry_run = not args.auto_submit
+    if args.auto_submit:
+        logger.warning("AUTO-SUBMIT ENABLED — the bot will click Submit on your behalf.")
+
     orchestrator = ApplicationOrchestrator(
         config=config,
         ai_router=ai_router,
         profile=profile,
         telegram_bot=telegram_bot,
-        dry_run=args.dry_run,
+        dry_run=effective_dry_run,
     )
 
     mode = config.get("application_mode", {}).get("default", "approve_first")
-    logger.info("Auto Job Applier ready (mode=%s, dry_run=%s)", mode, args.dry_run)
+    logger.info("Auto Job Applier ready (mode=%s, dry_run=%s)", mode, effective_dry_run)
     logger.info("Target roles: %s", ", ".join(profile.job_preferences.target_roles[:3]) + "...")
 
     if telegram_bot:

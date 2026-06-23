@@ -38,8 +38,21 @@ class DocumentPipeline:
 
     async def generate_documents(self, job: dict, profile: UserProfile,
                                   scoring: ScoringResult) -> DocumentSet:
-        """Generate tailored resume and cover letter, render as PDFs."""
+        """Generate tailored resume and cover letter, render as PDFs.
+
+        Honors the legitimacy gate (career-ops port): if the A-G Block G
+        marks the posting as suspicious, we refuse to spend Sonnet tokens
+        on a tailored CV for a likely ghost listing.
+        """
         docs = DocumentSet()
+
+        if getattr(scoring, "is_suspicious", False):
+            logger.warning(
+                "Skipping doc generation (legitimacy gate) for %s at %s — signals=%s",
+                job.get("title"), job.get("company"),
+                getattr(scoring, "legitimacy_signals", []),
+            )
+            return docs
 
         # 1. Generate tailored resume
         try:

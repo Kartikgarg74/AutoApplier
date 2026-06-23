@@ -274,35 +274,3 @@ def safe_parse_json(text: str, fallback: dict | None = None) -> dict | None:
     return fallback
 
 
-def validate_llm_score(value, min_val: float = -5, max_val: float = 5, default: float = 0) -> float:
-    """Validate and clamp a numeric score from LLM output."""
-    try:
-        v = float(value)
-        return max(min_val, min(v, max_val))
-    except (TypeError, ValueError):
-        return default
-
-
-def validate_llm_confidence(value, default: float = 50) -> float:
-    """Validate confidence score (0-100) from LLM output."""
-    return validate_llm_score(value, 0, 100, default)
-
-
-def validate_trade_amount(
-    quantity: int | float,
-    price: float,
-    max_capital: float,
-    max_position_pct: float = 10.0,
-) -> int | float:
-    """Sanity-check a trade amount. Returns 0 if suspicious."""
-    if quantity <= 0 or price <= 0:
-        return 0
-    total_value = quantity * price
-    max_allowed = max_capital * (max_position_pct / 100)
-    if total_value > max_allowed:
-        logger.warning(
-            "Trade amount %.2f exceeds max %.2f (%.1f%% of capital) — rejecting",
-            total_value, max_allowed, max_position_pct,
-        )
-        return 0
-    return quantity

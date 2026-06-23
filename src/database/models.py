@@ -40,7 +40,13 @@ class Job(Base):
     resume_focus_areas: Mapped[str] = mapped_column(Text, default="[]")  # JSON array
     cover_letter_hook: Mapped[str] = mapped_column(Text, default="")
 
-    application_status: Mapped[str] = mapped_column(String, default="scraped")
+    # A-G rubric (career-ops port) — structured block scores + legitimacy gate
+    block_scores: Mapped[str] = mapped_column(Text, default="{}")   # JSON object
+    legitimacy_tier: Mapped[str] = mapped_column(String, default="proceed_with_caution")
+    legitimacy_signals: Mapped[str] = mapped_column(Text, default="[]")  # JSON array
+    report_path: Mapped[str] = mapped_column(String, default="")
+
+    application_status: Mapped[str] = mapped_column(String, default="Evaluated")
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
     def get_matching_skills(self) -> list[str]:
@@ -76,7 +82,9 @@ class Application(Base):
     job_url: Mapped[str] = mapped_column(String, default="")
     applied_date: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     relevance_score: Mapped[float | None] = mapped_column(Float, nullable=True)
-    status: Mapped[str] = mapped_column(String, default="applied")
+    status: Mapped[str] = mapped_column(String, default="Applied")
+    legitimacy_tier: Mapped[str] = mapped_column(String, default="proceed_with_caution")
+    report_path: Mapped[str] = mapped_column(String, default="")
     resume_version: Mapped[str] = mapped_column(String, default="")
     cover_letter_version: Mapped[str] = mapped_column(String, default="")
     response_date: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)

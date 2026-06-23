@@ -48,14 +48,3 @@ class AnalyticsEngine:
         )
 
         return report
-
-    def generate_daily_summary(self) -> dict:
-        """Generate today's summary stats for Telegram."""
-        stats = self.tracker.get_stats(days=1)
-        return {
-            "scraped": 0,  # Filled by orchestrator
-            "scored": 0,
-            "applied": stats.get("total", 0),
-            "skipped": 0,
-            "avg_score": stats.get("avg_score", 0),
-        }

@@ -4,6 +4,7 @@ import logging
 
 from .claude_client import ClaudeClient
 from .groq_client import GroqClient
+from .ollama_client import OllamaClient
 from src.utils.security import sanitize_error
 
 logger = logging.getLogger(__name__)
@@ -35,9 +36,11 @@ class AIRouter:
 
         anthropic_config = ai_config.get("anthropic", {})
         groq_config = ai_config.get("groq", {})
+        ollama_config = ai_config.get("ollama", {})
 
         self.claude = None
         self.groq = None
+        self.ollama = None
 
         api_key = anthropic_config.get("api_key", "")
         if api_key:
@@ -50,11 +53,17 @@ class AIRouter:
                 daily_limit=groq_config.get("rate_limit", 14400),
             )
 
+        if ollama_config.get("enabled", False) or self.primary_provider == "ollama":
+            self.ollama = OllamaClient(
+                host=ollama_config.get("host", "http://localhost:11434"),
+                timeout=ollama_config.get("timeout", 120.0),
+            )
+
         # Validate at least one provider is configured
-        if not self.claude and not self.groq:
+        if not self.claude and not self.groq and not self.ollama:
             raise RuntimeError(
                 "No AI providers configured. "
-                "Set ANTHROPIC_API_KEY or GROQ_API_KEY in your .env file."
+                "Set ANTHROPIC_API_KEY, GROQ_API_KEY, or enable ollama in config."
             )
 
         configured = []
@@ -62,6 +71,8 @@ class AIRouter:
             configured.append("Anthropic (Claude)")
         if self.groq:
             configured.append("Groq")
+        if self.ollama:
+            configured.append("Ollama (local)")
         logger.info("AI providers configured: %s", ", ".join(configured))
 
         self.models = anthropic_config.get("models", {
@@ -69,6 +80,10 @@ class AIRouter:
             "quality": "claude-sonnet-4-6",
         })
         self.groq_model = groq_config.get("model", "llama-3.3-70b-versatile")
+        self.ollama_models = ollama_config.get("models", {
+            "cheap": "qwen2.5:7b",
+            "quality": "qwen2.5:32b-instruct",
+        })
 
         routing = ai_config.get("routing", {})
         self.task_routing = {**TASK_TIERS, **routing}
@@ -83,11 +98,18 @@ class AIRouter:
             return self.claude, model
         elif provider == "groq" and self.groq:
             return self.groq, self.groq_model
+        elif provider == "ollama" and self.ollama:
+            model = self.ollama_models.get(tier, self.ollama_models.get("cheap"))
+            return self.ollama, model
+        # Fallback cascade: prefer whatever is configured
         elif self.claude:
             model = self.models.get(tier, self.models.get("cheap"))
             return self.claude, model
         elif self.groq:
             return self.groq, self.groq_model
+        elif self.ollama:
+            model = self.ollama_models.get(tier, self.ollama_models.get("cheap"))
+            return self.ollama, model
         else:
             raise RuntimeError("No AI providers configured. Check your API keys.")
 
@@ -151,4 +173,9 @@ class AIRouter:
             parts.append(f"  Tokens: {self.claude.total_input_tokens} in / {self.claude.total_output_tokens} out")
         if self.groq:
             parts.append(f"Groq: {self.groq.requests_remaining} requests remaining today")
+        if self.ollama:
+            parts.append(
+                f"Ollama (local): {self.ollama.total_input_tokens} in / "
+                f"{self.ollama.total_output_tokens} out (no cost)"
+            )
         return "\n".join(parts) if parts else "No providers active"

@@ -5,6 +5,7 @@ import logging
 from src.ai.router import AIRouter
 from src.applier.profile.loader import UserProfile
 from src.database.models import get_session, Job
+from src.utils.states import AppState
 
 from .keyword_filter import KeywordFilter
 from .ai_scorer import AIScorer, ScoringResult
@@ -32,6 +33,7 @@ class ScoringPipeline:
             "review": [],         # score 60-80
             "weak_match": [],     # score < 60 but passed keyword filter
             "skipped": [],        # failed keyword filter
+            "suspicious": [],     # legitimacy gate blocked — ghost/scam
             "errors": [],
         }
 
@@ -44,7 +46,7 @@ class ScoringPipeline:
             kw_score = self.keyword_filter.score(job, profile)
             if kw_score < self.keyword_threshold:
                 results["skipped"].append(job)
-                self._update_status(job["id"], "skipped")
+                self._update_status(job["id"], AppState.SKIP.value)
                 logger.debug("Keyword skip: %s at %s (score: %.1f)", job["title"], job["company"], kw_score)
             else:
                 passed_filter.append(job)
@@ -61,19 +63,30 @@ class ScoringPipeline:
         scored = await self.ai_scorer.score_batch(passed_filter, profile, max_batch=self.max_batch)
 
         for job, scoring in scored:
+            # Legitimacy gate first — ghost/scam blocks all downstream work
+            if scoring.is_suspicious:
+                results["suspicious"].append((job, scoring))
+                self._update_status(job["id"], AppState.DISCARDED.value)
+                logger.info(
+                    "Legitimacy gate BLOCKED: %s at %s (signals=%s)",
+                    job["title"], job["company"], scoring.legitimacy_signals,
+                )
+                continue
+
             if scoring.relevance_score >= self.auto_apply_threshold:
                 results["strong_match"].append((job, scoring))
             elif scoring.relevance_score >= self.apply_threshold:
                 results["review"].append((job, scoring))
             else:
                 results["weak_match"].append((job, scoring))
-                self._update_status(job["id"], "skipped")
+                self._update_status(job["id"], AppState.SKIP.value)
 
         logger.info(
-            "AI scoring: %d strong, %d review, %d weak",
+            "AI scoring: %d strong, %d review, %d weak, %d suspicious",
             len(results["strong_match"]),
             len(results["review"]),
             len(results["weak_match"]),
+            len(results["suspicious"]),
         )
 
         return results
@@ -104,6 +117,7 @@ class ScoringPipeline:
             f"Strong matches (>=80): {len(results['strong_match'])}\n"
             f"For review (60-80): {len(results['review'])}\n"
             f"Weak matches (<60): {len(results['weak_match'])}\n"
+            f"Suspicious (gated): {len(results.get('suspicious', []))}\n"
             f"Keyword skipped: {len(results['skipped'])}\n"
             f"Errors: {len(results['errors'])}"
         )

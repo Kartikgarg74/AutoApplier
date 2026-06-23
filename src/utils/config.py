@@ -78,24 +78,3 @@ class ConfigLoader:
         with open(profile_path) as f:
             return yaml.safe_load(f) or {}
 
-    def load_finance_config(self, market: str) -> dict:
-        """Load a finance market config (zerodha, alpaca, binance)."""
-        config_path = self.config_dir / f"{market}.yaml"
-        if not config_path.exists():
-            raise FileNotFoundError(f"Finance config not found: {config_path}")
-
-        with open(config_path) as f:
-            config = yaml.safe_load(f) or {}
-
-        return _substitute_env_vars(config)
-
-    def load_news_config(self) -> dict:
-        """Load news & sentiment config."""
-        config_path = self.config_dir / "news.yaml"
-        if not config_path.exists():
-            return {}
-
-        with open(config_path) as f:
-            config = yaml.safe_load(f) or {}
-
-        return _substitute_env_vars(config)

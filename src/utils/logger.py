@@ -8,7 +8,7 @@ from pathlib import Path
 
 def setup_logging(log_dir: str = "data/logs", level: str = "INFO") -> None:
     """Configure logging with console and file handlers."""
-    from src.utils.security import secure_directory, secure_file
+    from src.utils.security import secure_directory
 
     log_path = Path(log_dir)
     secure_directory(log_path)
